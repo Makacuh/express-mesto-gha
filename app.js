@@ -12,7 +12,7 @@ app.use(bodyParser.urlencoded({ extended: true }));
 
 app.use((req, res, next) => {
   req.user = {
-    _id: '62e3bc9da3f4b5d874cb7c2b', // вставьте сюда _id созданного в предыдущем пункте пользователя
+    _id: '62e3bc9da3f4b5d874cb7c2b',
   };
   next();
 });
@@ -28,9 +28,9 @@ async function main() {
   await mongoose.connect('mongodb://localhost:27017/mestodb', {
     useNewUrlParser: true,
   });
-  console.log('Connected to db');
+  console.log('Соединение с БД');
   await app.listen(PORT, () => {
-    console.log(`App listening on port ${PORT}`);
+    console.log(`Ожидание ответа от ${PORT}`);
     console.log('Ссылка на сервер');
     console.log(BASE_PATH);
   });

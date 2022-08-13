@@ -1,3 +1,4 @@
+/* eslint-disable no-debugger */
 const jwt = require('jsonwebtoken');
 const { SECRET_KEY } = require('../environment/env');
 const AuthorizationError = require('../errors/authorizationError');

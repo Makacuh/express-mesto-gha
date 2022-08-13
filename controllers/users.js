@@ -3,7 +3,7 @@ const jwt = require('jsonwebtoken');
 const User = require('../models/user');
 const { customError } = require('../errors/customErrors');
 const { CREATED } = require('../errors/errorStatuses');
-const { HASH_LENGTH } = require('../environment/env');
+const { HASH_LENGTH, SECRET_KEY } = require('../environment/env');
 const NotFoundError = require('../errors/notFoundError');
 
 const createUser = (req, res, next) => {
@@ -24,15 +24,17 @@ const createUser = (req, res, next) => {
 
 const login = (req, res, next) => {
   const { email, password } = req.body;
-
   return User.findUserByCredentials(email, password)
     .then((user) => {
-      const token = jwt.sign({ _id: user._id }, 'some-secret-alohomora', {
-        expiresIn: '7d',
-      });
-      res.send({ jwt: token });
+      const token = jwt.sign({ _id: user._id }, SECRET_KEY, { expiresIn: '7d' });
+      res
+        .cookie('jwt', token, {
+          maxAge: 3600000 * 24 * 7,
+          httpOnly: true,
+          sameSite: true,
+        }).send({ token });
     })
-    .catch(next);
+    .catch((err) => next(err));
 };
 
 const findUsers = (req, res, next) => {

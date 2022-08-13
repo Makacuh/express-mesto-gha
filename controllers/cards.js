@@ -26,7 +26,7 @@ const findCards = (req, res, next) => {
 const deleteCard = (req, res, next) => {
   Card.findById(req.params.cardId)
     .orFail(() => {
-      throw new NotFoundError('Запрашиваемые данные по указанному id не найдены');
+      throw new NotFoundError('Данных по указанному id нет');
     })
     .then((card) => {
       if (card.owner.toString() !== req.user._id) {
@@ -34,7 +34,7 @@ const deleteCard = (req, res, next) => {
       }
       Card.findByIdAndRemove(req.params.cardId)
         .orFail(() => {
-          throw new NotFoundError('Запрашиваемые данные по указанному id не найдены');
+          throw new NotFoundError('Данных по указанному id нет');
         })
         .then((cardForDeleting) => {
           res.send(cardForDeleting);
@@ -51,11 +51,11 @@ const deleteCard = (req, res, next) => {
 const likeCard = (req, res, next) => {
   Card.findByIdAndUpdate(
     req.params.cardId,
-    { $addToSet: { likes: req.user._id } }, // добавить _id в массив, если его там нет
+    { $addToSet: { likes: req.user._id } },
     { new: true },
   )
     .orFail(() => {
-      throw new NotFoundError('Запрашиваемые данные по указанному id не найдены');
+      throw new NotFoundError('Данных по указанному id нет');
     })
     .then((card) => {
       res.send(card);
@@ -68,11 +68,11 @@ const likeCard = (req, res, next) => {
 const dislikeCard = (req, res, next) => {
   Card.findByIdAndUpdate(
     req.params.cardId,
-    { $pull: { likes: req.user._id } }, // убрать _id из массива
+    { $pull: { likes: req.user._id } },
     { new: true },
   )
     .orFail(() => {
-      throw new NotFoundError('Запрашиваемые данные по указанному id не найдены');
+      throw new NotFoundError('Данных по указанному id нет');
     })
     .then((card) => {
       res.send(card);

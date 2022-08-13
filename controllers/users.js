@@ -79,12 +79,12 @@ const updateUserInfo = (req, res, next) => {
     req.user._id,
     { name, about },
     {
-      new: true, // обработчик then получит на вход обновлённую запись
-      runValidators: true, // данные будут валидированы перед изменением
+      new: true,
+      runValidators: true,
     },
   )
     .orFail(() => {
-      throw new NotFoundError('Запрашиваемые данные по указанному id не найдены');
+      throw new NotFoundError('Данных по указанному id нет');
     })
     .then((user) => {
       res.send(user);

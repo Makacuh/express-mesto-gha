@@ -1,5 +1,5 @@
 const Card = require('../models/card');
-const { errorMessage } = require('../errors/customErrors');
+const { customError } = require('../errors/customErrors');
 const { CREATED } = require('../errors/errorStatuses');
 const NotFoundError = require('../errors/notFoundError');
 const ForbiddenError = require('../errors/forbiddenError');
@@ -11,7 +11,7 @@ const createCard = (req, res, next) => {
       res.status(CREATED).send(card);
     })
     .catch((err) => {
-      errorMessage(err, req, res, next);
+      customError(err, req, res, next);
     });
 };
 
@@ -19,7 +19,7 @@ const findCards = (req, res, next) => {
   Card.find({})
     .then((card) => res.send(card))
     .catch((err) => {
-      errorMessage(err, req, res, next);
+      customError(err, req, res, next);
     });
 };
 
@@ -40,11 +40,11 @@ const deleteCard = (req, res, next) => {
           res.send(cardForDeleting);
         })
         .catch((err) => {
-          errorMessage(err, req, res, next);
+          customError(err, req, res, next);
         });
     })
     .catch((err) => {
-      errorMessage(err, req, res, next);
+      customError(err, req, res, next);
     });
 };
 
@@ -61,7 +61,7 @@ const likeCard = (req, res, next) => {
       res.send(card);
     })
     .catch((err) => {
-      errorMessage(err, req, res, next);
+      customError(err, req, res, next);
     });
 };
 
@@ -78,7 +78,7 @@ const dislikeCard = (req, res, next) => {
       res.send(card);
     })
     .catch((err) => {
-      errorMessage(err, req, res, next);
+      customError(err, req, res, next);
     });
 };
 

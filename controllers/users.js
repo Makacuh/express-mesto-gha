@@ -1,7 +1,7 @@
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
 const User = require('../models/user');
-const { errorMessage } = require('../errors/customErrors');
+const { customError } = require('../errors/customErrors');
 const { CREATED } = require('../errors/errorStatuses');
 const { HASH_LENGTH } = require('../environment/env');
 const NotFoundError = require('../errors/notFoundError');
@@ -18,7 +18,7 @@ const createUser = (req, res, next) => {
       res.status(CREATED).send(user);
     })
     .catch((err) => {
-      errorMessage(err, req, res, next);
+      customError(err, req, res, next);
     });
 };
 
@@ -41,7 +41,7 @@ const findUsers = (req, res, next) => {
       res.send(users);
     })
     .catch((err) => {
-      errorMessage(err, req, res, next);
+      customError(err, req, res, next);
     });
 };
 
@@ -54,7 +54,7 @@ const findUserById = (req, res, next) => {
       res.send(user);
     })
     .catch((err) => {
-      errorMessage(err, req, res, next);
+      customError(err, req, res, next);
     });
 };
 
@@ -67,7 +67,7 @@ const getUserInfo = (req, res, next) => {
       res.send(user);
     })
     .catch((err) => {
-      errorMessage(err, req, res, next);
+      customError(err, req, res, next);
     });
 };
 
@@ -88,7 +88,7 @@ const updateUserInfo = (req, res, next) => {
       res.send(user);
     })
     .catch((err) => {
-      errorMessage(err, req, res, next);
+      customError(err, req, res, next);
     });
 };
 
@@ -108,7 +108,7 @@ const updateUserAvatar = (req, res, next) => {
       res.send(user);
     })
     .catch((err) => {
-      errorMessage(err, req, res, next);
+      customError(err, req, res, next);
     });
 };
 

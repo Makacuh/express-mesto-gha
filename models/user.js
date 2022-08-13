@@ -6,21 +6,18 @@ const AuthorizationError = require('../errors/authorizationError');
 const userSchema = new mongoose.Schema({
   name: {
     type: String,
-    // required: false,
     minlength: [2, 'Значение должно быть не меньше 2, у вас {VALUE}'],
     maxlength: [30, 'Значение должно быть не больше 30, у вас {VALUE}'],
     default: 'Жак-Ив Кусто',
   },
   about: {
     type: String,
-    // required: false,
     minlength: [2, 'Значение должно быть не меньше 2, у вас {VALUE}'],
     maxlength: [30, 'Значение должно быть не больше 30, у вас {VALUE}'],
     default: 'Исследователь',
   },
   avatar: {
     type: String,
-    // required: false,
     default: 'https://pictures.s3.yandex.net/resources/jacques-cousteau_1604399756.png',
   },
   email: {

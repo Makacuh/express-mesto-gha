@@ -1,27 +1,51 @@
 const express = require('express');
 const mongoose = require('mongoose');
+const helmet = require('helmet');
+const rateLimit = require('express-rate-limit');
 const bodyParser = require('body-parser');
-const { NOT_FOUND } = require('./utils/statuses');
+const cookieParser = require('cookie-parser');
+const { errors } = require('celebrate');
+// const { NOT_FOUND } = require('./errors/errorStatuses');
+const signup = require('./routes/signup');
+const signin = require('./routes/signin');
+const auth = require('./middlewares/auth');
+const users = require('./routes/users');
+const cards = require('./routes/cards');
+const NotFoundError = require('./errors/notFoundError');
 
 const { PORT = 3000, BASE_PATH } = process.env;
 
 const app = express();
 
+const limiter = rateLimit({
+  windowMs: 15 * 60 * 1000,
+  max: 100,
+});
+app.use(limiter);
+app.use(helmet());
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
+app.use(cookieParser());
 
-app.use((req, res, next) => {
-  req.user = {
-    _id: '62e3bc9da3f4b5d874cb7c2b',
-  };
-  next();
+app.use('/signup', signup);
+app.use('/signin', signin);
+
+app.use(auth);
+
+app.use('/users', users);
+app.use('/cards', cards);
+
+app.use('/*', () => {
+  throw new NotFoundError('Страница не найдена');
 });
 
-app.use('/users', require('./routes/users'));
-app.use('/cards', require('./routes/cards'));
-
-app.use('/*', (req, res) => {
-  res.status(NOT_FOUND).send({ message: 'Cтраницы не существует' });
+app.use(errors());
+app.use((err, req, res, next) => {
+  const { statusCode = 500, message } = err;
+  res
+    .status(statusCode)
+    .send({ message: statusCode === 500 ? 'Ошибка на сервере' : message });
+  next();
 });
 
 async function main() {
@@ -35,4 +59,5 @@ async function main() {
     console.log(BASE_PATH);
   });
 }
+
 main();
